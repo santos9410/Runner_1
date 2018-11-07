@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<element type="Window">
+	<attribute name="Position" value="0 10" />
+	<attribute name="Size" value="700 750" />
+	<attribute name="Min Anchor" value="0.5 0.5" />
+	<attribute name="Max Anchor" value="0.5 0.5" />
+	<attribute name="Pivot" value="0.5 0.5" />
+	<attribute name="Opacity" value="0.4" />
+	<attribute name="Focus Mode" value="FocusableDefocusable" />
+	<attribute name="Image Rect" value="48 0 64 16" />
+	<attribute name="Border" value="4 4 4 4" />
+	<attribute name="Resize Border" value="8 8 8 8" />
+	<element type="Text">
+		<attribute name="Name" value="TxtTurbo" />
+		<attribute name="Min Anchor" value="0.5 0.5" />
+		<attribute name="Max Anchor" value="0.5 0.5" />
+		<attribute name="Pivot" value="0.5 0.5" />
+		<attribute name="Color" value="1 1 1 1" />
+		<attribute name="Font Size" value="66" />
+		<attribute name="Text" value="TURBO" />
+		<attribute name="Text Effect" value="Shadow" />
+		<attribute name="Effect Color" value="-0.59 -0.29 -0.4 1" />
+	</element>
+</element>
