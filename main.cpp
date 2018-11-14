@@ -1,6 +1,5 @@
 #include "main.h"
 
-
 #include <Urho3D/IO/Log.h>
 #include <Urho3D/Core/CoreEvents.h>
 #include <Urho3D/Engine/Engine.h>
@@ -38,7 +37,7 @@ using namespace Urho3D;
 Game1::Game1(Context* context) :
 	Application(context)
 {
-
+	Animator::RegisterObject(context);
 }
 
 
@@ -56,21 +55,16 @@ void Game1::Start() {
 
 	SetupViewPort();
 
-	CreateCharacter(0.8f, Vector3(0.0f, -3.0f, 0.0f), 0.8f);
-	fondo1 = scene_->GetChild("background1");
-	fondo2 = scene_->GetChild("background2");
+	CrearPiso();
 
-	Node* nodep = scene_->CreateChild("piso");
-	nodep->SetScale2D(Vector2(20, 3));
-	nodep->SetPosition2D(Vector2(0, -6));
-	auto body2 = nodep->CreateComponent<RigidBody2D>();
-	body2->SetBodyType(BT_STATIC);
-	auto box2 = nodep->CreateComponent<CollisionBox2D>();
-	box2->SetSize(Vector2(20, 1));
 
 	SubscribeToEvent(E_KEYDOWN, URHO3D_HANDLER(Game1, HandleKeyDown));
 	SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(Game1, HandleUpdate));
 	SubscribeToEvent(E_POSTRENDERUPDATE, URHO3D_HANDLER(Game1, HandlePostRenderUpdate));
+	SubscribeToEvent(E_PHYSICSBEGINCONTACT2D, URHO3D_HANDLER(Game1, HandleCollisionBegin));
+
+	animator_ = scene_->CreateChild("animator")->CreateComponent<Animator>();
+	animator_->IniciarComponentes(scene_);
 }
 //Cargamos todo lo relacionado a scene 
 void Game1::CreateScene() {
@@ -111,50 +105,26 @@ void Game1::Stop() {
 
 }
 
-
-void Game1::HandleUpdate(StringHash eventType, VariantMap& eventData) {
-	//using namespace Update;
-
-
-
-
-	auto* input = GetSubsystem<Input>();
-
-	if (input->GetKeyDown(KEY_SPACE))
-	{
-		auto* body = animatedSprite->GetComponent<RigidBody2D>();
-		Vector2 veloc = body->GetLinearVelocity();
-
-		if (veloc.y_ == 0) {
-			jump = true;
-		}
-		else
-		{
-			jump = false;
-		}
-
-
-		if (jump) {
-			body->ApplyLinearImpulseToCenter(Vector2(0.0f, 10.27f), true);
-		}
-
-	}
-
-	else if (animatedSprite->GetAnimation() != "run")
-	{
-		animatedSprite->SetAnimation("run");
-	}
-
-	if (time_->GetMSec(false) > tiempo && play) { // controlar carretera
-
-		ControlarCamino();
-
-		time_->Reset();
-	}
-
+void Game1::CrearPiso() {
+	Node* nodep = scene_->CreateChild("piso");
+	nodep->SetScale2D(Vector2(20, 3));
+	nodep->SetPosition2D(Vector2(0, -6));
+	auto body2 = nodep->CreateComponent<RigidBody2D>();
+	body2->SetBodyType(BT_STATIC);
+	auto box2 = nodep->CreateComponent<CollisionBox2D>();
+	box2->SetSize(Vector2(20, 1));
 }
 
 
+
+void Game1::HandleUpdate(StringHash eventType, VariantMap& eventData) {
+
+	using namespace Update;
+
+	//float timeStep = eventData[P_TIMESTEP].GetFloat();
+
+	
+}
 
 void Game1::HandleKeyDown(StringHash eventType, VariantMap& eventData) {
 
@@ -169,74 +139,26 @@ void Game1::HandleKeyDown(StringHash eventType, VariantMap& eventData) {
 		engine_->Exit();
 	}
 
-
-
-}
-
-Node* Game1::CreateCharacter(float friction, Vector3 position, float scale)
-{
-	auto* cache = GetSubsystem<ResourceCache>();
-	Node* spriteNode = scene_->CreateChild("Imp");
-	spriteNode->SetPosition(position);
-	spriteNode->SetScale(scale);
-	animatedSprite = spriteNode->CreateComponent<AnimatedSprite2D>();
-	// Get scml file and Play "idle" anim
-	auto* animationSet = cache->GetResource<AnimationSet2D>("imp/imp.scml");
-	animatedSprite->SetAnimationSet(animationSet);
-	animatedSprite->SetAnimation("idle");
-	animatedSprite->SetLayer(3); // Put character over tile map (which is on layer 0) and over Orcs (which are on layer 2)
-	animatedSprite->SetFlipX(true);
-
-	auto* impBody = spriteNode->CreateComponent<RigidBody2D>();
-	impBody->SetBodyType(BT_DYNAMIC);
-	impBody->SetAllowSleep(false);
-	auto* shape = spriteNode->CreateComponent<CollisionCircle2D>();
-	shape->SetRadius(1.1f); // Set shape size
-	shape->SetFriction(friction); // Set friction
-	shape->SetRestitution(0.0f); // Bounce
-	impBody->SetGravityScale(2.0f);
-	return spriteNode;
 }
 
 void Game1::HandlePostRenderUpdate(StringHash eventType, VariantMap& eventData)
 {
 
-	auto* physicsWorld = scene_->GetComponent<PhysicsWorld2D>();
-	physicsWorld->DrawDebugGeometry();
+	/*auto* physicsWorld = scene_->GetComponent<PhysicsWorld2D>();
+	physicsWorld->DrawDebugGeometry();*/
 
 }
-void Game1::ControlarCamino() {
-	float x = fondo1->GetPosition().x_;
-	float y = fondo1->GetPosition().y_;
-	float z = fondo1->GetPosition().z_;
 
-	float x2 = fondo2->GetPosition().x_;
-	float y2 = fondo2->GetPosition().y_;
-	float z2 = fondo2->GetPosition().z_;
-
-
-	if ((x - distancia) > -33.5) {
-		fondo1->Translate2D(Vector2(-1 * distancia, 0));
-
+void Game1::HandleCollisionBegin(StringHash eventType, VariantMap& eventData)
+{
+	Log::Write(1, String(eventType));
+	auto* hitNodeA = static_cast<Node*>(eventData[PhysicsBeginContact2D::P_NODEA].GetPtr());
+	auto* hitNodeB = static_cast<Node*>(eventData[PhysicsBeginContact2D::P_NODEB].GetPtr());
+	if (hitNodeA->GetName() == "Imp" && hitNodeB->GetName() == "item1") {
+		Log::Write(1, String("fin del juego"));
+		animator_->play = false;
 	}
-	else {
-		x = 32;
-		fondo1->SetPosition(Vector3(x, y, z));
-
-
-	}
-
-	if ((x2 - distancia) > -33.5) {
-		fondo2->Translate2D(Vector2(-1 * distancia, 0));
-	}
-	else {
-		x2 = 32;
-		fondo2->SetPosition(Vector3(x2, y2, z2));
-	}
-
-
-
-
 
 }
+
 URHO3D_DEFINE_APPLICATION_MAIN(Game1)

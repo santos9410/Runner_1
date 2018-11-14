@@ -1,4 +1,5 @@
 
+#include "AnimatorController.h"
 
 #include <Urho3D/Engine/Application.h>
 #include <Urho3D/Engine/Engine.h>
@@ -9,6 +10,8 @@
 #include <Urho3D/UI/Text3D.h>
 #include <Urho3D/UI/UI.h>
 #include <Urho3D/Urho2D/AnimatedSprite2D.h>
+
+#include <list>
 
 
 using namespace Urho3D;
@@ -33,30 +36,14 @@ class Game1 : public Application
         SharedPtr<Scene> scene_;
         SharedPtr<Node> cameraNode_;
         
-		//bool play = false;
-		
-		Node* carro;
-			
-		float scaleX;
-		float scaleY;
-		
-		Node* fondo1;
-		Node* fondo2;
-
-		AnimatedSprite2D* animatedSprite;
-
-		Node* CreateCharacter(float friction, Vector3 position, float scale);
-    
-		const float MOVE_SPEED = 5.0f;
-		float distancia = 0.2f;
-		Timer* time_ = new Timer();
-		bool play = true;
-		int tiempo = 50;
-		
-		float fightTimer_ = 0;
-		bool jump = true;
+		Animator* animator_;
 private:
+	
 	void HandlePostRenderUpdate(StringHash eventType, VariantMap& eventData);
-	void ControlarCamino();
+	
+	void HandleCollisionBegin(StringHash eventType, VariantMap& eventData);
+
+	void CrearPiso();
+	
 };
 
