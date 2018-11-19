@@ -26,6 +26,7 @@ public:
 	void Update(float timeStep) override;
 
 	void IniciarComponentes(Scene* scene_);
+	void ReiniciarValores();
 
 	bool play = false;
 protected:
@@ -39,8 +40,8 @@ protected:
 	float scaleX;
 	float scaleY;
 
-	Vector3 posInicial1;
-	Vector3 posInicial2;
+	Vector3 posInit_C;
+	
 
 	Node* personaje_;
 
@@ -50,10 +51,12 @@ protected:
 	float distanciaMon = 0.07f;
 	Timer* time_ = new Timer();
 	
+	float salto = 9.50f;
+	float gravedad = 2.0f;
 
 	int tiempo = 30;
 
-	float nuevoObs_ = 10;
+	float nuevoObs_ = 7.0f;
 	float nuevaMoneda_ = 5;
 	bool jump = true;
 	float time2 = 0;
@@ -66,12 +69,21 @@ protected:
 	Scene* scene_;
 	
 	int puntaje = 0;
+	int caso = 0;
+	float tiempoConteo = 800;
+	bool inicio = true;
+
+	SharedPtr<UIElement> layoutRoot_;
+	Timer* timeCount_ = new Timer();
+
 private:
 	void ControlarCamino();
 	void ControlarSalto();
 	void ControlarVelocidad(float timeStep);
 	void ControlarMonedas(float timeStep);
 	
+	void ControlarInicio();
+	void CreateUI();
 	AnimatedSprite2D* animatedSprite;
 	Text3D* puntajeTxt;
 };

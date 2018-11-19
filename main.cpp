@@ -139,7 +139,14 @@ void Game1::HandleKeyDown(StringHash eventType, VariantMap& eventData) {
 		engine_->Exit();
 	}
 
-}
+	if (key == KEY_R) {
+		if (!animator_->play) {
+			
+			animator_->ReiniciarValores();
+		}
+	}
+}	
+
 
 void Game1::HandlePostRenderUpdate(StringHash eventType, VariantMap& eventData)
 {
