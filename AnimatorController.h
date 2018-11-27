@@ -46,18 +46,20 @@ protected:
 	Node* personaje_;
 
 	const float MOVE_SPEED = 5.0f;
-	float distancia = 0.07f;
+	float distancia = 0.07f; // 0.07f
 
 	float distanciaMon = 0.07f;
 	Timer* time_ = new Timer();
 	
-	float salto = 9.50f;
-	float gravedad = 2.0f;
+	float salto = 9.50; // 9.50f
+	float gravedad = 2.0f; // 2.0f
 
 	int tiempo = 30;
 
-	float nuevoObs_ = 7.0f;
-	float nuevaMoneda_ = 5;
+	float nuevoObs_ = 7.0f; // 7.0f
+
+
+	float nuevaMoneda_ = 2;
 	bool jump = true;
 	float time2 = 0;
 	float time3 =  0;

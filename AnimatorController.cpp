@@ -205,10 +205,13 @@ void Animator::ControlarVelocidad(float timeStep) {
 		time2 = time2 + timeStep;
 	}
 
-	if (timeVelo > 5) { // cada 5 segundos aumenta la velocidad del camino
+	if (timeVelo > 4) { // cada x segundos aumenta la velocidad del camino
 		distancia = distancia + 0.01f;
 		if (nuevoObs_ > 0.9f) {
-			nuevoObs_ = nuevoObs_ - 1.0f;
+			nuevoObs_ = nuevoObs_ - 0.4f;
+			//salto = salto + 0.009f;
+			//gravedad = gravedad + 0.009f;
+
 		}
 		timeVelo = 0;
 	}
@@ -243,7 +246,7 @@ void Animator::ControlarMonedas(float timeStep) {
 		float x3 = node2->GetPosition().x_;
 		float y3 = node2->GetPosition().y_;
 
-		if ((y3 - 0.5f) < yc && (x3 > xc - 1.0f && x3 < xc + 1.0f)) {
+		if ((y3 - 0.9f) < yc && (x3 > xc - 1.2f && x3 < xc + 1.2f)) {
 
 			node2->Remove();
 			puntaje = puntaje + 10;
