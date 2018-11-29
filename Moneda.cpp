@@ -24,7 +24,7 @@ Node * Moneda::Create(Vector3 position)
 	Node* node_ = scene_->CreateChild("Coins");
 
 	node_->SetPosition(position);
-	node_->SetScale(Vector3(1, 1, 1));
+	node_->SetScale(Vector3(1.2, 1.2, 1));
 
 	/*auto* staticSprite = node_->CreateComponent<StaticSprite2D>();
 	staticSprite->SetFlipY(true);

@@ -49,7 +49,7 @@ void Game1::Setup() {
 }
 
 void Game1::Start() {
-	engine_->SetMaxFps(60);
+	engine_->SetMaxFps(120);
 
 	CreateScene();
 

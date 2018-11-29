@@ -205,10 +205,10 @@ void Animator::ControlarVelocidad(float timeStep) {
 		time2 = time2 + timeStep;
 	}
 
-	if (timeVelo > 4) { // cada x segundos aumenta la velocidad del camino
-		distancia = distancia + 0.01f;
+	if (timeVelo > 10) { // cada x segundos aumenta la velocidad del camino
+		distancia = distancia + 0.02f;
 		if (nuevoObs_ > 0.9f) {
-			nuevoObs_ = nuevoObs_ - 0.4f;
+			nuevoObs_ = nuevoObs_ - 0.6f;
 			//salto = salto + 0.009f;
 			//gravedad = gravedad + 0.009f;
 
@@ -218,6 +218,7 @@ void Animator::ControlarVelocidad(float timeStep) {
 	else {
 		timeVelo = timeVelo + timeStep;
 	}
+	
 
 	if (time3 > nuevaMoneda_) {
 		nuevaMoneda_ = Random(5, 20);
